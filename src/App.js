@@ -2,20 +2,16 @@ import React from 'react';
 import {Routes,Route} from 'react-router-dom'
 
 import './App.css'; 
-import Nav from './components/Nav';
 import Home from './pages/Home';
 import Starred from './pages/Starred';
 
 function App() {
   return (
-    <div>
-      <Nav />
      <Routes>
       <Route exact path='/' element={<Home />} />
       <Route  path='/starred' element={<Starred />} />
       <Route element={'404 page'}/>
      </Routes>
-    </div>
   );  
 }
 
