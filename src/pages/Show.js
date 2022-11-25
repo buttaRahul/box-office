@@ -6,15 +6,29 @@ const Show = () => {
   const {id}  = useParams();
   const url = `/shows/${id}?embed[]=seasons&embed[]=cast`;
 
+  const [isLoading,setIsLoading] = useState(true);
+  const [error,setError] = useState(null);
   const [show,setShow] = useState(null);
   useEffect(()=>{
-    apiGet(url).then(results=>setShow(results));
-  },[id])
-  console.log(id);
-  console.log('show',show);
+    apiGet(url).then(results => {
+        setTimeout(()=>{
+          setShow(results)
+          setIsLoading(false);
+        },2000);
+    }).catch(err => {
+        setError(err.message);
+        setIsLoading(false);
+    });
+  },[id]);
+  if(isLoading){
+    return <div> Data is being loading ...</div>
+  }
+  if(error){
+    return <div>Error occured : {error}</div>
+  }
 
   return (
-    <div>Show {id} </div>
+    <div>{show.id} {show.name} </div>
   )
 }
 

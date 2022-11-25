@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { StyledShowCard } from './ShowCard.styled';
 
 const ShowCard = ({ id, image, name, summary }) => {
-  console.log(id,name,summary);
   const summaryAsText = summary
     ? `${summary.split(' ').slice(0, 10).join(' ').replace(/<.+?>/g, '')}...`
     : 'No description';
