@@ -1,25 +1,44 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { useParams } from 'react-router-dom'
 import { apiGet } from '../misc/config';
-// const QUERY_STRING = '/shows/id/'
+
+const initalState = {
+    show:null,
+    isLoading:true,
+    error:null
+}
+
+const reducer = (prevState,action)=> {
+    switch(action.type)
+    {
+        case 'FETCH_SUCCESS' : {
+            return {...prevState,isLoading:false,show:action.show}
+        }
+        case 'FETCH_FAILED' : {
+            return {...prevState,isLoading:false,error:action.error}
+        }
+        default : return prevState;
+    };
+};
+
 const Show = () => {
   const {id}  = useParams();
   const url = `/shows/${id}?embed[]=seasons&embed[]=cast`;
+  
+  //   const [state,dispatch] = useReducer(reducer,initalState);
+  const [{show,isLoading,error},dispatch] = useReducer(reducer,initalState);
 
-  const [isLoading,setIsLoading] = useState(true);
-  const [error,setError] = useState(null);
-  const [show,setShow] = useState(null);
+
   useEffect(()=>{
     apiGet(url).then(results => {
         setTimeout(()=>{
-          setShow(results)
-          setIsLoading(false);
-        },2000);
+            dispatch({type:'FETCH_SUCCESS',show:results})
+        },1000);
     }).catch(err => {
-        setError(err.message);
-        setIsLoading(false);
+        dispatch({type:'FETCH_FAILED',error:err.message})
     });
   },[id]);
+
   if(isLoading){
     return <div> Data is being loading ...</div>
   }
