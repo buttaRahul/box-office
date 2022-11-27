@@ -22,6 +22,7 @@ function usePersistedReducer(reducer,initialState,key){
     });
 
     useEffect(()=>{
+        console.log('add to local storage',state);
         localStorage.setItem(key,JSON.stringify(state));
     },[state,key]);
     return [state,dispatch]
